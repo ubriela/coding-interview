@@ -204,7 +204,7 @@ public class BinarySearchTree {
 
 	// Given a binary search tree, design an algorithm which creates a linked
 	// list of all the nodes at each depth (i e , if you have a tree with depth
-	// D, you’ll have D linked lists)
+	// D, you'll have D linked lists)
 	// The idea is to use a global variable to store all list of node at each
 	// depth
 	public void createLinkedListAtEachDepth(LinkedList<Node> parents) {

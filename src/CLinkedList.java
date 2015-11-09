@@ -28,7 +28,7 @@ public class CLinkedList {
 	}
 
 
-	// reverse a linked list
+	// reverse a linked list (create new)
 	public CLinkedList reverse(CLinkedList ll) {
 		if (ll == null || ll.first == null)
 			return null;

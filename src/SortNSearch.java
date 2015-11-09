@@ -1,6 +1,4 @@
-import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collections;
 import java.util.Comparator;
 import java.util.Hashtable;
 import java.util.PriorityQueue;
@@ -52,7 +50,7 @@ public class SortNSearch {
 		// }
 
 		// Test isValidSchedule
-		Meeting[] meetings = { new Meeting(6, 10), new Meeting(1, 7),
+		Meeting[] meetings = { new Meeting(0, 1), new Meeting(1, 7),
 				new Meeting(11, 20) };
 		System.out.println(isValidSchdule(meetings));
 	}

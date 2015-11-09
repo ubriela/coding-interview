@@ -31,9 +31,11 @@ public class ArrayNString {
 		// System.out.println(s);
 		// }
 
-		int[] arr = { 1, 2, 2, 4, 5 };
-		int sum = 6;
-		a.findPairs(arr, sum);
+//		int[] arr = { 1, 2, 2, 4, 5 };
+//		int sum = 6;
+//		a.findPairs(arr, sum);
+		
+		System.out.println(isAnagram("hientotron","totronghien"));
 	}
 
 	/**
@@ -202,21 +204,20 @@ public class ArrayNString {
 	}
 
 	// Write a method to decide if two strings are anagrams or not
-	public boolean isAnagram(String str1, String str2) {
+	public static boolean isAnagram(String str1, String str2) {
 		if (str1 == null || str2 == null || str1.length() != str2.length())
 			return false;
-		int[] char_freq1 = new int[256];
-		int[] char_freq2 = new int[256];
+		int[] char_freq = new int[256];
 
 		// count the frequency of each character
 		for (int i = 0; i < str1.length(); i++) {
-			char_freq1[str1.charAt(i)]++;
-			char_freq2[str2.charAt(i)]++;
+			char_freq[str1.charAt(i)]++;
+			char_freq[str2.charAt(i)]--;
 		}
 
 		// check two arrays are equal
 		for (int i = 0; i < 256; i++)
-			if (char_freq1[i] != char_freq2[i])
+			if (char_freq[i] != 0)
 				return false;
 
 		// otherwise
