@@ -12,16 +12,41 @@ public class LinkedList {
 	}
 
 	public static void main(String[] args) {
-		LinkedList ll1 = new LinkedList();
-		ll1.add(new Integer(9));
-		ll1.add(new Integer(9));
-		ll1.add(new Integer(9));
-		LinkedList ll2 = new LinkedList();
-		ll2.add(new Integer(1));
-		LinkedList L = sum(ll1, ll2);
-		L.print();
+		LinkedList ll = new LinkedList();
+		ll.add(new Integer(1));
+		ll.add(new Integer(2));
+		ll.add(new Integer(3));
+		ll.add(new Integer(4));
+		ll.add(new Integer(5));
+//		ll.last.next = ll.first;k
+		
+		// CLinkedList ll2 = ll1.reverse(ll1);
+		// Node n = ll2.first;
+		// while (n != null) {
+		// System.out.println(n.value);
+		// n = n.next;
+		// }
+//		System.out.println(ll.findNthLast(2, ll.first));
+		System.out.println(ll.determineTermination(ll.first));
 	}
 
+	// reverse a linked list (create new)
+	public LinkedList reverse(LinkedList ll) {
+		if (ll == null || ll.first == null)
+			return null;
+		LinkedList result = new LinkedList();
+		Node node = ll.first;
+		while (node != null) {
+			Integer value = node.value;
+			Node n = new Node(value);
+			n.next = result.first;
+			result.first = n;
+			node = node.next;
+		}
+		return result;
+	}
+
+	// compute sum of two numbers represented by two linked lists
 	public static LinkedList sum(LinkedList L1, LinkedList L2) {
 		LinkedList L = new LinkedList();
 		Node n1 = L1.first;
@@ -87,6 +112,31 @@ public class LinkedList {
 		return L;
 	}
 
+	// Input: single LinkedList 1 -> 2 -> 3 -> 4 ->5
+	// Output: nth node to the end
+	// For example, n= 2 output 4
+	// O(N), N is the size of the linkedlist
+	public int findNthLast(int n, Node f) {
+		if (n < 1)
+			return -Integer.MAX_VALUE;
+		Node first = f;
+		Node second = null;
+		int i = 0;
+		while (first != null && i < n) {
+			first = first.next;
+			i++;
+		}
+		if (i < n)
+			return -Integer.MAX_VALUE;
+		second = first;
+		first = f;
+		while (second != null) {
+			first = first.next;
+			second = second.next;
+		}
+		return first.value;
+	}
+
 	// Implement an algorithm to find the nth to last element of a singly linked
 	// list
 	public Node findLastNthElem(int n) {
@@ -108,7 +158,9 @@ public class LinkedList {
 		return last;
 	}
 
-	// Write code to remove duplicates from an unsorted linked list.
+	// Write code to remove duplicates from an unsorted linked list
+	// this method uses extra storage hashtable
+	// O(N), N is the size of the list
 	public void removeDups() {
 		if (first == null)
 			return;
@@ -129,32 +181,54 @@ public class LinkedList {
 
 	// Write code to remove duplicates from an unsorted linked list, without
 	// using additional structure
+	// O(N^2), N is the size of the list
 	public void removeDups2() {
 		if (first == null)
 			return;
 		Node current = first.next;
 		while (current != null) { // first iteration
-			Integer value = current.value;
-			if (first.value.equals(value)) // if the first element is
-											// duplicated, remove the first
+			if (first.value.equals(current.value)) { // if the first element is
+														// duplicated, remove
+														// the first
 				first = first.next;
-			else {
-				Node n = first.next;
-				Node previous = first;
-				while (n != current && n != null) { // iterate to check
-													// duplicate
-					if (n.value.equals(value)) { // remove n and exit
-						previous.next = n.next;
-						break;
-					}
-					previous = n;
-					n = n.next;
-				}
+				continue;
 			}
+			Node n = first.next;
+			Node previous = first;
+			while (n != current && n != null) { // iterate to check
+												// duplicate
+				if (n.value.equals(current.value)) { // remove n and exit
+					previous.next = n.next;
+					break;
+				}
+				previous = n;
+				n = n.next;
+			} // end second iteration
 			current = current.next;
-		}
+		} // end first iteration
 	}
 
+	// Write a function that takes a pointer to the head of a list and
+	// determines whether the list is cyclic or acyclic. Your function should
+	// return false if the list is acyclic and true if it is cyclic. You may not
+	// modify the list in any way.
+	public boolean determineTermination( Node head ){
+		Node slow = head;
+		Node fast = head;
+		
+		while (true) {
+			if (fast == null || fast.next == null)
+				return false;
+			else if (fast == slow || fast.next == slow)
+				return true;
+			else {
+				fast = fast.next.next;
+				slow = slow.next;
+			}
+		}
+	}
+	
+	
 	// add to the end
 	public void add(Integer value) {
 		if (value == null)

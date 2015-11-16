@@ -42,6 +42,19 @@ public class Tree {
 		return cur_y;
 	}
 
+	// find a path to its ancestor O(logN), assuming balance tree.
+	// Worst case O(N)
+	public HashSet<Integer> getAncestors(int[] boss, int x) {
+		HashSet<Integer> ancestors_x = new HashSet<Integer>();
+		int cur = x;
+		while (boss[cur] != -1) {
+			ancestors_x.add(cur);
+			cur = boss[cur];
+		}
+		ancestors_x.add(cur);
+		return ancestors_x;
+	}
+	
 	// this code is much better, no extra storage.
 	// the average complexity is the same
 	public int lowestCommonBoss2(int[] boss, int x, int y) {
@@ -81,18 +94,5 @@ public class Tree {
 			h++;
 		}
 		return h;
-	}
-
-	// find a path to its ancestor O(logN), assuming balance tree.
-	// Worst case O(N)
-	public HashSet<Integer> getAncestors(int[] boss, int x) {
-		HashSet<Integer> ancestors_x = new HashSet<Integer>();
-		int cur = x;
-		while (boss[cur] != -1) {
-			ancestors_x.add(cur);
-			cur = boss[cur];
-		}
-		ancestors_x.add(cur);
-		return ancestors_x;
 	}
 }

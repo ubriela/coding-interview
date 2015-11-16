@@ -19,10 +19,8 @@ public class SortNSearch {
 
 		// test sort
 
-		// int[] A = { 15, 16, 17, 18, 19, 20, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,
-		// 11,
-		// 12, 13, 14 }; // rotated array
-		// System.out.println(searchRotatedArray(A, 6, 0, 19));
+		// int[] A = { 5, 6, 7, 1, 2, 3, 4 }; // rotated array
+		// System.out.println(searchRotatedArray(A, 6, 0, 7));
 
 		// char[] dict = { 'q', 'w', 'e', 'r', 't', 'y', 'u', 'i', 'o', 'p',
 		// 'a',
@@ -50,9 +48,13 @@ public class SortNSearch {
 		// }
 
 		// Test isValidSchedule
-		Meeting[] meetings = { new Meeting(0, 1), new Meeting(1, 7),
-				new Meeting(11, 20) };
-		System.out.println(isValidSchdule(meetings));
+		// Meeting[] meetings = { new Meeting(0, 1), new Meeting(1, 7),
+		// new Meeting(11, 20) };
+		// System.out.println(isValidSchdule(meetings));
+
+		int[] A = { 1, 3, 3, 3, 5, 7, 9 };
+		int[] B = { 1, 2, 3, 3, 4, 6 };
+		intersectArr(A, B);
 	}
 
 	// Input: a list meeting. Each meeting has a start time and end time
@@ -176,10 +178,9 @@ public class SortNSearch {
 			if (A[mid] == value)
 				return (mid + 1);
 
+			// { 5, 6, 7, 1, 2, 3, 4}
 			if (A[start] <= A[mid]) {
-				if (value > A[mid])
-					start = mid + 1;
-				else if (value >= A[start])
+				if (value >= A[start])
 					end = mid - 1;
 				else
 					start = mid + 1;
@@ -194,6 +195,10 @@ public class SortNSearch {
 	// Write a method to sort an array of strings so that all the anagrams are
 	// next to each other
 	public static class AnagramComparator implements Comparator<String> {
+		@Override
+		public int compare(String s1, String s2) {
+			return sortChars(s1).compareTo(sortChars(s2));
+		}
 
 		private String sortChars(String s) {
 			char[] content = s.toCharArray();
@@ -201,9 +206,26 @@ public class SortNSearch {
 			return new String(content);
 		}
 
-		@Override
-		public int compare(String s1, String s2) {
-			return sortChars(s1).compareTo(sortChars(s2));
+	}
+
+	// Given *sorted* arrays A and B of lengths n and m respectively, return an
+	// array C containing elements common to A and B. The array C should be free
+	// of duplicates. How would you perform this intersection?
+	// complexity O(m+n)
+	public static void intersectArr(int[] A, int[] B) {
+		int i = 0;
+		int j = 0;
+		while (i < A.length && j < B.length) {
+			if (A[i] == B[j]) {
+				if (i == 0 || (i > 0 && A[i] != A[i - 1])) // do not count duplication!
+					System.out.print(A[i] + " ");
+				i++;
+				j++;
+			} else if (A[i] < B[j])
+				i++;
+			else
+				// A[i] > B[j]
+				j++;
 		}
 	}
 

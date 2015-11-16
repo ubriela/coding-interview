@@ -1,5 +1,7 @@
- import java.util.HashSet;
+import java.util.HashSet;
 import java.util.Hashtable;
+
+import org.omg.CORBA.CharHolder;
 
 public class ArrayNString {
 
@@ -31,11 +33,13 @@ public class ArrayNString {
 		// System.out.println(s);
 		// }
 
-//		int[] arr = { 1, 2, 2, 4, 5 };
-//		int sum = 6;
-//		a.findPairs(arr, sum);
-		
-		System.out.println(isAnagram("hientotron","totronghien"));
+		// int[] arr = { 1, 2, 2, 4, 5 };
+		// int sum = 6;
+		// a.findPairs(arr, sum);
+
+		// System.out.println(isAnagram("hientotron", "totronghien"));
+
+		System.out.println(a.firstNonRepeated("pettepd"));
 	}
 
 	/**
@@ -256,5 +260,68 @@ public class ArrayNString {
 						// set col set = 0
 						A[k][j] = 0;
 				}
+	}
+
+	// string removeChars( string str, string remove );
+	// where any character existing in remove must be deleted from str. For
+	// example, given a str of “Battle of the Vowels: Hawaii vs. Grozny” and a
+	// remove of “aeiou”, the function should transform str to “Bttl f th Vwls:
+	// Hw vs. Grzny”. Justify any design decisions you make and discuss the
+	// efficiency of your solution.
+
+	// complexity = O(m+n) where m,n are the lengths of str and remove strings,
+	// respectively.
+	public String removeChars(String str, String remove) {
+		char[] s = str.toCharArray();
+		char[] r = remove.toCharArray();
+		boolean[] flags = new boolean[128]; // assume ASCII
+		int len = s.length;
+		int src, dst;
+
+		// set flags for characters to be removed
+		for (src = 0; src < r.length; ++src)
+			flags[r[src]] = true;
+
+		src = 0;
+		dst = 0;
+
+		// loop through all characters, copying if they are not flagged
+		while (src < len) {
+			if (!flags[s[src]])
+				s[dst++] = s[src];
+			src++;
+		}
+
+		return new String(s).substring(0, dst);
+	}
+
+	// Write an efficient function to find the first nonrepeated character in a
+	// string. For instance, the first nonrepeated character in “total” is ‘o’
+	// and the first nonrepeated character in “teeter” is ‘r’. Discuss the
+	// efficiency of your algorithm.
+	
+	public static Character firstNonRepeated( String str ){
+		Hashtable charHash = new Hashtable<Character, Object>();
+		Character c;
+		Object seenOne = new Object();
+		Object seenTwice = new Object();
+		
+		// scan str, build hashtable
+		for (int i = 0; i < str.length(); i++) {
+			c = new Character(str.charAt(i));
+			Object o = charHash.get(c);
+			if (o == null)
+				charHash.put(c, seenOne);
+			else if (o == seenOne)
+				charHash.put(c, seenTwice);
+		}
+		
+		// find first non repeated character
+		for (int i = 0; i < str.length(); i++) {
+			c = new Character(str.charAt(i));
+			if (charHash.get(c) == seenOne)
+				return c;
+		}
+		return null;
 	}
 }

@@ -1,6 +1,7 @@
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.Stack;
 
 public class BinarySearchTree {
 
@@ -12,14 +13,14 @@ public class BinarySearchTree {
 	}
 
 	public static void main(String[] args) {
-		BinarySearchTree tree = new BinarySearchTree();
-		tree.root = tree.insert(tree.root, 3);
-		tree.root = tree.insert(tree.root, 2);
-		tree.root = tree.insert(tree.root, 4);
-		tree.root = tree.insert(tree.root, 1);
-		tree.root = tree.insert(tree.root, 5);
-		tree.root = tree.insert(tree.root, 6);
-		// System.out.println(tree.isBalance());
+		 BinarySearchTree tree = new BinarySearchTree();
+		 tree.root = tree.insert(tree.root, tree.root, 3);
+		 tree.root = tree.insert(tree.root, tree.root, 2);
+		 tree.root = tree.insert(tree.root, tree.root, 4);
+		 tree.root = tree.insert(tree.root, tree.root, 1);
+		 tree.root = tree.insert(tree.root, tree.root, 5);
+		 tree.root = tree.insert(tree.root, tree.root, 6);
+//		 System.out.println(tree.isBalanceLessMemory());
 
 		// Test createBinTreeWithMinHeight
 		// int[] N = {1,2,3,4,5,6};
@@ -54,22 +55,22 @@ public class BinarySearchTree {
 		// tree.root = tree.insert(tree.root, 9);
 		// tree.root = tree.insert(tree.root, 2);
 		// tree.root = tree.insert(tree.root, 5);
-		// System.out.println(tree.commonAncestor(tree.root, 2, 4).value);
+		// System.out.println(tree.commonAncestor2(tree.root, 1, 9).value);
 
 		// Test isSubTree
-		// BinarySearchTree tree = new BinarySearchTree();
-		// tree.root = tree.insert(tree.root, 6);
-		// tree.root = tree.insert(tree.root, 3);
-		// tree.root = tree.insert(tree.root, 8);
-		// tree.root = tree.insert(tree.root, 1);
-		// tree.root = tree.insert(tree.root, 4);
-		// tree.root = tree.insert(tree.root, 7);
-		// tree.root = tree.insert(tree.root, 9);
-		// tree.root = tree.insert(tree.root, 2);
-		// tree.root = tree.insert(tree.root, 5);
-		// BinarySearchTree tree2 = new BinarySearchTree();
-		// tree2.root = tree.insert(tree2.root, 1);
-		// tree2.root = tree.insert(tree2.root, 2);
+//		BinarySearchTree tree = new BinarySearchTree();
+//		tree.root = tree.insert(tree.root, 6);
+//		tree.root = tree.insert(tree.root, 3);
+//		tree.root = tree.insert(tree.root, 8);
+//		tree.root = tree.insert(tree.root, 1);
+//		tree.root = tree.insert(tree.root, 4);
+//		tree.root = tree.insert(tree.root, 7);
+//		tree.root = tree.insert(tree.root, 9);
+//		tree.root = tree.insert(tree.root, 2);
+//		tree.root = tree.insert(tree.root, 5);
+//		BinarySearchTree tree2 = new BinarySearchTree();
+//		tree2.root = tree.insert(tree2.root, 1);
+//		tree2.root = tree.insert(tree2.root, 2);
 		//
 		// System.out.println(tree.isSubTree(tree2.root, tree.root));
 
@@ -89,7 +90,9 @@ public class BinarySearchTree {
 		// System.out.println(p.n2.value);
 		// }
 
-		System.out.println(tree.isBinSearchTree(tree.root));
+//		System.out.println(tree.isBinSearchTree(tree.root));
+//		tree.preorderTraversal(tree.root);
+		 tree.in_order_traverse_less_memory(tree.root);
 	}
 
 	// if a binary tree is a binary search tree
@@ -202,6 +205,18 @@ public class BinarySearchTree {
 		return (isAncestor(node.left, value) || isAncestor(node.right, value));
 	}
 
+	public Node commonAncestor2(Node root, Integer A, Integer B) {
+		while (root != null) {
+			if (root.value > A && root.value > B)
+				root = root.left;
+			else if (root.value < A && root.value < B)
+				root = root.right;
+			else
+				return root;
+		}
+		return null; // if empty tree
+	}
+
 	// Given a binary search tree, design an algorithm which creates a linked
 	// list of all the nodes at each depth (i e , if you have a tree with depth
 	// D, you'll have D linked lists)
@@ -239,6 +254,7 @@ public class BinarySearchTree {
 	}
 
 	// if a tree is balance or not
+	// memory = O(n), n is the number of nodes
 	public boolean isBalance() {
 		if (maxDepth(root) - minDepth(root) > 1)
 			return false;
@@ -257,29 +273,85 @@ public class BinarySearchTree {
 			return 0;
 		return 1 + Math.max(maxDepth(node.left), maxDepth(node.right));
 	}
+	
+	// memory = O(h), h is the height of the tree
+	public boolean isBalanceLessMemory() {
+		return getHeight(root) != -2;
+	}
+	
+	public int getHeight(Node node) {
+		if (node == null)
+			return -1;
+		
+		int l_height = getHeight(node.left);
+		if (l_height == -2)
+			return -2;	// left tree is not balanced
+		int r_height = getHeight(node.right);
+		if (r_height == -2)
+			return -2; // right tree is not balanced
+		
+		if (Math.abs(l_height - r_height) > 1)
+			return -2;	// current node is not balance
+		return Math.max(l_height, r_height) + 1;
+	}
 
 	// insert a node into a bin tree
 	// if there is already a value in the tree --> replace
-	public Node insert(Node node, Integer value) {
+	public Node insert(Node parent, Node node, Integer value) {
 		if (node == null)
 			return new Node(value);
 		if (node.value == value)
 			node.value = value; // replace value
 		else {
 			if (node.value > value)
-				node.left = insert(node.left, value);
+				node.left = insert(node, node.left, value);
 			else
-				node.right = insert(node.right, value);
+				node.right = insert(node, node.right, value);
 		}
+		node.parent = parent;
 		return node;
 	}
 
 	// in order traverse
+	// memory = O(n)
 	public void in_order_traverse(Node node) {
 		if (node != null) {
 			in_order_traverse(node.left);
 			System.out.print(node.value + " ");
 			in_order_traverse(node.right);
+		}
+	}
+	
+	// not done yet
+	public void in_order_traverse_less_memory(Node node) {
+		Node curr = node;
+		Node prev = null;	// point to parent so that we can backtrack
+		Node next = null;
+		while (curr != null) {
+			if (prev != null || (prev != null && prev.left == curr) || (prev != null && prev.right == curr)) {
+				if (curr.left != null)
+					next = curr.left;
+				else {
+					System.out.print(curr.value + " ");
+					if (curr.right != null)
+						next = curr.right;
+					else
+						next = curr.parent;
+				}
+			} else if (curr.left == prev) {
+				System.out.print(curr.value + " ");
+				if (curr.right != null)
+					next = curr.right;
+				else
+					next = curr.parent;
+			} else { // curr.right == prev
+				next = curr.parent;
+			}
+			
+			// right
+			
+			prev = curr;
+			curr = next;
 		}
 	}
 
@@ -289,6 +361,23 @@ public class BinarySearchTree {
 			System.out.print(node.value + " ");
 			pre_order_traverse(node.left);
 			pre_order_traverse(node.right);
+		}
+	}
+
+	// preorder traverse without using recursion --> avoid too many function
+	// calls but use extra stack
+	public void preorderTraversal(Node root) {
+		java.util.Stack<Node> s = new Stack<>();
+		s.push(root);
+		while (true && !s.isEmpty()) {
+			Node curr = s.pop();
+			if (curr == null)
+				break;
+			System.out.print(curr.value + " ");
+			if (curr.right != null)
+				s.push(curr.right);
+			if (curr.left != null)
+				s.push(curr.left);
 		}
 	}
 
@@ -305,11 +394,13 @@ public class BinarySearchTree {
 		Integer value;
 		Node left;
 		Node right;
+		Node parent;
 
 		public Node(Integer value) {
 			this.value = value;
 			this.left = null;
 			this.right = null;
+			this.parent = null;
 		}
 	}
 }
