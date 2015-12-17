@@ -1,7 +1,7 @@
 // 3.5 an implementation a queue using two stacks
 public class QueueUse2Stack {
-	Stack S1 = new Stack();
-	Stack S2 = new Stack();
+	StackC S1 = new StackC();
+	StackC S2 = new StackC();
 	
 	public static void main(String[] args) {
 		QueueUse2Stack q = new QueueUse2Stack();

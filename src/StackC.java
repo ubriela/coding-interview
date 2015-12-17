@@ -1,9 +1,9 @@
-public class Stack {
+public class StackC {
 	Node top;
 	int size;
 
 	public static void main(String[] args) {
-		Stack s = new Stack();
+		StackC s = new StackC();
 		s.push(4);
 		s.push(2);
 		s.push(6);
@@ -15,7 +15,7 @@ public class Stack {
 		System.out.println(s.pop());
 	}
 
-	public Stack() {
+	public StackC() {
 		top = null;
 		size = 0;
 	}
@@ -23,7 +23,7 @@ public class Stack {
 	public void sort() { // n is the size of the stack
 		if (isEmpty())
 			return;
-		Stack s = new Stack(); // temp stack
+		StackC s = new StackC(); // temp stack
 		for (int n = size; n >= 2; n--) {
 			int min = Integer.MAX_VALUE;
 			for (int i = 1; i <= n; i++) {

@@ -3,7 +3,7 @@
 // This idea will help if large values are put after small values
 public class StackWithMin2 {
 	Node top;
-	Stack s = new Stack();
+	StackC s = new StackC();
 
 	public static void main(String[] args) {
 		StackWithMin2 s = new StackWithMin2();
