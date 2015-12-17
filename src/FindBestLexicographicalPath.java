@@ -6,8 +6,9 @@ public final class FindBestLexicographicalPath {
 		// TODO Auto-generated method stub
 
 		int[] path = getBestPath(m, 3, 3);
+		System.out.print("BestPath: " );
 		for (int i = 0; i < path.length; i++)
-			System.out.println(path[i] + "\t");
+			System.out.print(path[i] + "\t");
 
 	}
 
