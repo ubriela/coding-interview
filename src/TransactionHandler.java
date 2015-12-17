@@ -6,8 +6,10 @@ import java.util.Stack;
 
 public class TransactionHandler {
 
+	// <row, {<col,value>}> data
 	private static HashMap<String, HashMap<String, String>> data = new HashMap<>();
 
+	// keep track of parameters and well as data affected by the operations
 	private static Stack<MethodParams> s = new Stack<MethodParams>();
 
 	public static void main(String[] args) {
@@ -22,12 +24,12 @@ public class TransactionHandler {
 		t.updateCell("row2", "col1", "baz");
 		t.beginTransaction();
 		t.deleteRow("row1");
-		
+
 		System.out.println("before rollback");
 		t.debug();
-		
+
 		t.rollbackTransaction();
-		
+
 		System.out.println("after rollback");
 		t.debug();
 
