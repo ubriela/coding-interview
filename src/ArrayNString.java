@@ -1,3 +1,4 @@
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.Hashtable;
 
@@ -6,7 +7,7 @@ import org.omg.CORBA.CharHolder;
 public class ArrayNString {
 
 	public static void main(String[] args) {
-		ArrayNString a = new ArrayNString();
+//		ArrayNString a = new ArrayNString();
 		// char[] str = "to trong hien       ".toCharArray();
 		// int[][] M = new int[2][3];
 		// M[0][0] = 1;
@@ -39,7 +40,10 @@ public class ArrayNString {
 
 		// System.out.println(isAnagram("hientotron", "totronghien"));
 
-		System.out.println(a.firstNonRepeated("pettepd"));
+//		System.out.println(a.firstNonRepeated("pettepd"));
+		
+		int[] a = {-1, -1, 0, 2, 3, 5, 8};
+		System.out.println(has_3_sum(a, 18));
 	}
 
 	/**
@@ -53,7 +57,7 @@ public class ArrayNString {
 	// no duplicated values
 	// complexity: O(N) --> sorting is not good
 	// without an extra storage, using in place sorting (quicksort) and iterate
-	// all all the element and use binary search
+	// all the element and use binary search
 	public void findPairs(int[] list, int sum) {
 		if (list == null)
 			return;
@@ -69,6 +73,39 @@ public class ArrayNString {
 					System.out.println(list[i] + " " + remainder);
 			}
 		}
+	}
+	
+	public static boolean has_3_sum(int[] a, int s) {
+		Arrays.sort(a);
+		
+		for (int i = 0; i < a.length; i++) {
+			// remove a[i] from array
+			int[] tmp = new int[a.length - 1];
+			System.arraycopy(a, 0, tmp, 0, i);
+			System.arraycopy(a, i + 1, tmp, i, a.length - i - 1);
+			
+			// find if the sum of two numbers in a equal to s - t
+			if (has_2_sum(tmp, s - a[i]))
+			return true;
+		}
+		return false;
+	}
+	
+	// check if two different values sum up to s
+	public static boolean has_2_sum(int[] a, int s) {
+		int i = 0;
+		int j = a.length - 1;
+		while (i < j) {
+			if (a[i] + a[j] == s) {
+				System.out.println(a[i] + " " + a[j]);
+				return true;
+			}
+			else if (a[i] + a[j] < s)
+				i++;
+			else	// a[i] + a[j] > s
+				j--;
+		}
+		return false;
 	}
 
 	// return distinct words of a string, using hashset, O(N)

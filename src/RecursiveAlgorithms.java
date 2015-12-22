@@ -1,4 +1,6 @@
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 
@@ -34,9 +36,15 @@ public class RecursiveAlgorithms {
 		// test isPowerOfTwo
 		// System.out.println(isPowerOfTwo(10));
 
-		int[] A = { 25, 10, 5, 1 };
-		int N = 25;
-		System.out.print(r.makeChange(N, A, 0));
+//		int[] A = { 25, 10, 5, 1 };
+//		int N = 25;
+//		System.out.print(r.makeChange(N, A, 0));
+		
+//		int[] a = {0, 2, 3, 5, 8};
+//		System.out.println(isFound(a, 16));
+		
+		int[] a = {-1, -1, 0, 2, 3, 5, 8};
+		System.out.println(isSumUpTo(a, 17, 3));
 	}
 
 	// if an integer is a power of two
@@ -52,8 +60,8 @@ public class RecursiveAlgorithms {
 	// nickels (5 cents) and pennies (1 cent), write code to calculate the
 	// number of ways of representing n cents
 	/**
-	 * A is a list of money units, sorted in decreasing order
-	 * N is the total amount of money
+	 * A is a list of money units, sorted in decreasing order N is the total
+	 * amount of money
 	 */
 	public int makeChange(int N, int[] A, int idx) {
 		int count = 0;
@@ -121,4 +129,67 @@ public class RecursiveAlgorithms {
 		}
 		return subsets;
 	}
+
+	// Q1: Assume we have an unsorted integer array:
+	// [2 4 -1 3 5 -1 8 0]
+	//
+	// Give k: for example, 10
+	// Q: return true/false that three integers out of the array can sum up to
+	// k.
+	//
+	// k=6
+	
+	/**
+	 * 
+	 * @param a : array of integers
+	 * @param s : sum
+	 * @param n : the number of values
+	 * @return
+	 */
+	public static boolean isSumUpTo(int[] a, int s, int n) {
+//		System.out.println(s + " " + n);
+		if (n == 1) {
+			if (isFound(a, s))
+				return true;
+			else
+				return false;
+		}
+		for (int i = 0; i < a.length; i++) {
+			// if a[i] is included
+			int[] tmp = new int[a.length - 1];
+			System.arraycopy(a, 0, tmp, 0, i);
+			System.arraycopy(a, i + 1, tmp, i, a.length - i - 1);
+			if (isSumUpTo(tmp, s - a[i], n - 1))
+				return true;
+		}
+		
+		return false;
+	}
+	
+	/**
+	 * Binary search value n in array a
+	 * @param a
+	 * @param n
+	 * @return
+	 */
+	public static boolean isFound(int[] a, int n) {
+		if (a.length == 0)
+			return false;
+			
+		int left = 0;
+		int right = a.length - 1;
+		while (right > left) {
+			int mid = (left + right)/2;
+			if (a[mid] == n)
+				return true;
+			else if (a[mid] > n)
+				right = mid - 1;
+			else
+				left = mid + 1;
+			if (right == left && n == a[right])
+				return true;
+		}
+		return false;
+	}
+	
 }

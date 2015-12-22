@@ -1,5 +1,9 @@
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Set;
+import java.util.Vector;
+
+import javax.swing.plaf.basic.BasicTreeUI.TreeIncrementAction;
 
 /**
  * 
@@ -9,9 +13,13 @@ import java.util.HashSet;
 public class Tree {
 
 	public static void main(String[] args) {
-		Tree t = new Tree();
-		int[] boss = { 1, 3, 3, -1 };
-		System.out.println(t.lowestCommonBoss2(boss, 0, 1));
+		// Tree t = new Tree();
+		// int[] boss = { 1, 3, 3, -1 };
+		// System.out.println(t.lowestCommonBoss2(boss, 0, 1));
+
+		int[] tree = { 0, 0, 0, 1, 3, 5, 5, 2, 3, 4, 8, 9, 6, 1, 2};
+		Vector<Integer> v = removeNode2(tree, 3);
+		System.out.println(v.toString());
 	}
 
 	/**
@@ -54,7 +62,7 @@ public class Tree {
 		ancestors_x.add(cur);
 		return ancestors_x;
 	}
-	
+
 	// this code is much better, no extra storage.
 	// the average complexity is the same
 	public int lowestCommonBoss2(int[] boss, int x, int y) {
@@ -94,5 +102,82 @@ public class Tree {
 			h++;
 		}
 		return h;
+	}
+
+	// Given a set of trees
+	// [Node(0), Node(0), Node(0), Node(1), Node(3), Node(5), Node(5), Node(2)]
+	// 0
+	// |\
+	// 1 2
+	// | |
+	// 3 7
+	// |
+	// 4
+	//
+	// 5
+	// |
+	// 6
+	// Write a function to remove a particular index
+	// del id[3]
+	// output
+	// 0
+	// |\
+	// 1 2
+	//
+	// [Node(0), Node(0), Node(0), Node(3), Node(3)]
+	public static Vector<Integer> removeNode(int[] treeIdx, int id) {
+		Vector<Integer> ret = new Vector<>();
+		int removedCount = 0;
+		for (int i = 0; i < treeIdx.length; i++) {
+			if (!isAncestor(treeIdx, id, i)) {
+				if (treeIdx[i] < id)
+					// the current node is not affected by the removed nodes
+					ret.add(treeIdx[i]);
+				else
+					ret.add(treeIdx[i] - removedCount);
+			} else
+				// remove idx
+				removedCount++;
+		}
+		return ret;
+	}
+	
+	public static Vector<Integer> removeNode2(int[] treeIdx, int id) {
+		Vector<Integer> ret = new Vector<>();
+		HashSet<Integer> removedNodes = new HashSet<Integer>();
+		removedNodes.add(id);
+		int removedCount = 0;
+		for (int i = 0; i < treeIdx.length; i++) {
+			if (!removedNodes.contains(treeIdx[i]) && !removedNodes.contains(i) ) {
+				if (treeIdx[i] < id)
+					// the current node is not affected by the removed nodes
+					ret.add(treeIdx[i]);
+				else
+					ret.add(treeIdx[i] - removedCount);
+			} else {
+				removedNodes.add(i);
+				// remove idx
+				removedCount++;
+			}
+		}
+		return ret;
+	}
+
+	// check if
+	static boolean isAncestor(int[] treeIdx, int ancestorIdx, int i) {
+		boolean found = false;
+		if (treeIdx.length < i || treeIdx.length < ancestorIdx)
+			return false;
+		if (i == ancestorIdx)
+			return true;
+
+		while (!found) {
+			if (treeIdx[i] == ancestorIdx)
+				found = true;
+			if (i == treeIdx[i]) // i is the root node
+				return false;
+			i = treeIdx[i];
+		}
+		return found;
 	}
 }
